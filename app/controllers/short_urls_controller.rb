@@ -9,9 +9,22 @@ class ShortUrlsController < ApplicationController
   end
 
   def create
+    @url = ShortUrl.new(url_params)
+    if @url.save
+      render json: @url
+    else
+      render error: { error: 'Unable to create URL.' }, status: 400
+    end
   end
 
   def show
+      Rails.application.routes.url_helpers.short_url(title: self.title)
+  end
+
+private
+
+  def url_params
+    params.require(:url).permit(:title, :full_url)
   end
 
 end

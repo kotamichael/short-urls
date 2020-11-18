@@ -6,5 +6,5 @@ Rails.application.routes.draw do
 
   resources :short_urls, only: [:index, :create, :show]
   get "/" => "short_urls#index"
-  get '*id' => 'short_urls#show'
+  get '/s/:title', to: 'links#show', as: :short_code
 end
