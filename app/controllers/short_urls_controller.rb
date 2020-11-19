@@ -1,12 +1,12 @@
 class ShortUrlsController < ApplicationController
-
   # Since we're working on an API, we don't have authenticity tokens
   skip_before_action :verify_authenticity_token
 
   def index
-  	@short_urls = ShortUrl.order('click_count DESC').limit(100)
-    Rails.logger.info @short_urls.size
-    render json: @short_urls
+  	@top_hundred_full_urls = ShortUrl.order('click_count DESC').limit(100).pluck(:full_url)
+    render json: {
+      urls: @top_hundred_full_urls
+    }
   end
 
   def create
@@ -31,7 +31,7 @@ class ShortUrlsController < ApplicationController
 private
 
   def url_params
-    params.require(:url).permit(:title, :full_url, :short_code)
+    params.require(:full_url)
   end
 
   def show_params
