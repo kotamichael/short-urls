@@ -14,8 +14,8 @@ class ShortUrl < ApplicationRecord
   private
 
   def add_short_code
-    decimal_short_code = ShortUrl.all.size + 1
-    self.short_code = decimal_short_code.to_s(16)
+    decimal_id = ShortUrl.all.size + 1
+    self.short_code = decimal_id.to_s(16)
   end
 
   def validate_full_url
