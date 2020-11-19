@@ -29,3 +29,7 @@
 # Checking your short URL redirect
 
     curl -I localhost:3000/abc
+
+# Seeding the URL List
+
+The project comes with a seed file that will populate 101 URLs and shortcodes for use in evaluating the project.
