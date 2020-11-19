@@ -18,7 +18,7 @@ class ShortUrlsController < ApplicationController
   end
 
   def show
-      Rails.application.routes.url_helpers.short_url(title: self.title)
+      url = ShortUrl.find(url_params[:full_url])
   end
 
 private
