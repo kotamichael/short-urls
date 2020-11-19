@@ -7,6 +7,7 @@ RSpec.describe ShortUrlsController, type: :controller do
   describe "index" do
 
     let!(:short_url) { ShortUrl.create(full_url: "https://www.test.rspec") }
+    let!(:top_hundred) { ShortUrl.order('click_count DESC').limit(100).as_json }
 
     it "is a successful response" do
       get :index, format: :json
@@ -15,8 +16,7 @@ RSpec.describe ShortUrlsController, type: :controller do
 
     it "has a list of the top 100 urls" do
       get :index, format: :json
-
-      expect(parsed_response['urls']).to be_include(short_url.full_url)
+      expect(parsed_response['urls']).to eq top_hundred
     end
 
   end
