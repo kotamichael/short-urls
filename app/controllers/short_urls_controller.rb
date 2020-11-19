@@ -24,7 +24,7 @@ class ShortUrlsController < ApplicationController
       @url.click_count += 1
       @url.save!
       if @url.save
-        render json: @url
+        render json: @url.full_url
       end
   end
 
