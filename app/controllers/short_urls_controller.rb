@@ -10,11 +10,19 @@ class ShortUrlsController < ApplicationController
   end
 
   def create
-    @url = ShortUrl.new(url_params)
+    is_duplicate_url = ShortUrl.where(full_url: url_params).present?
+
+    if !is_duplicate_url
+      @url = ShortUrl.new(full_url: url_params)
+    else
+      render json: { error: 'Must be a unique URL.' }, status: 400
+      return
+    end
+
     if @url.save
       render json: @url
     else
-      render error: { error: 'Unable to create URL.' }, status: 400
+      render json: { error: 'Unable to create URL. Maybe an invalid format.' }, status: 400
     end
   end
 
