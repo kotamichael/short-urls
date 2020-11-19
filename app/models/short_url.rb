@@ -21,7 +21,7 @@ class ShortUrl < ApplicationRecord
   def validate_full_url
     host = URI.parse(self.full_url).host
   	if PublicSuffix.valid?(host) != true
-  		errors.add(:full_url, "is not a valid url")
+  		errors.add(:full_url, "Full url is not a valid url")
   	end
   end
 
