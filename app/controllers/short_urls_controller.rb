@@ -11,18 +11,26 @@ class ShortUrlsController < ApplicationController
 
   def create
     is_duplicate_url = ShortUrl.where(full_url: url_params).present?
+    is_valid_url = validate_full_url
 
     if !is_duplicate_url
       @url = ShortUrl.new(full_url: url_params)
     else
-      render json: { error: 'Must be a unique URL.' }, status: 400
+      render json: { errors: 'Must be a unique URL.' }, status: 400
+      return
+    end
+
+    if is_valid_url
+      @url = ShortUrl.new(full_url: url_params)
+    else
+      render json: { errors: 'Full url is not a valid url.' }, status: 400
       return
     end
 
     if @url.save
       render json: @url
     else
-      render json: { error: 'Unable to create URL. Maybe an invalid format.' }, status: 400
+      render json: { errors: 'Unable to create URL. Maybe an invalid format.' }, status: 400
     end
   end
 
@@ -37,6 +45,12 @@ class ShortUrlsController < ApplicationController
   end
 
 private
+
+  def validate_full_url
+    host = URI.parse(url_params).host
+    Rails.logger.info host
+    PublicSuffix.valid?(host)
+  end
 
   def url_params
     params.require(:full_url)
